@@ -1,3 +1,3 @@
 # Blogers Point
 
-[Secure JWT](./SecureJwt/Index.md)
+[Secure JWT](./SecureJwt/index.md)
