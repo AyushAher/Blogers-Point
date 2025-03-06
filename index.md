@@ -3,7 +3,7 @@ layout: default
 title: Home
 ---
 
-Welcome to my personal tech blog! This repository serves as a collection of my notes, learnings, and explorations in the world of technology.
+_Welcome to my personal tech blog! This repository serves as a collection of my notes, learnings, and explorations in the world of technology._
 
 ## About
 
