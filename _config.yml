@@ -1,7 +1,3 @@
-title: Ayush Aher's Blogs
-description: Technical Blogs by Ayush Aher
+title: Ayush Aher's Technical Documentations
+description: Technical Documentations by Ayush Aher
 theme: jekyll-theme-midnight
-show_excerpts: true
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
