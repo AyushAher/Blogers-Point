@@ -1,0 +1,7 @@
+title: Ayush Aher's Blogs
+description: Technical Blogs by Ayush Aher
+theme: minima
+show_excerpts: true
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
