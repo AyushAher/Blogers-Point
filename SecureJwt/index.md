@@ -2,48 +2,109 @@
 layout: default
 title: Secure JWT
 ---
-
 [⬅️ Back](/)
+---
+# RamsonDevelopers.SecureJwt
 
-# **Secure JWT**
+RamsonDevelopers.SecureJwt is a .NET class library that provides functionality to Securely authenticate using JWT, by ensuring the signing keys are rotated and by implementing fingerprint validation layer to it as well.
+---
 
-In today's API-driven world, JSON Web Tokens (JWTs) have become a cornerstone for authentication and authorization. However, their static nature can pose security risks, particularly if a token is compromised. Traditional JWTs, with a fixed secret key, remain valid until their expiration, leaving a window of vulnerability.
+## Installation
 
-Rotating JWTs offers a robust solution to mitigate this. This article explores a dynamic approach in which the security key used for signing JWTs is not hard coded and automatically rotates after a user's JWT expires.
+To use **RamsonDevelopers.SecureJwt** in your project, follow these steps:
 
-## **The Challenge with Static JWTs:**
+1. Download the **RamsonDevelopers.SecureJwt** source code or add it as a NuGet package to your solution.
 
-- **Compromised Key:** If the secret key is compromised, all existing and future JWTs signed with it are vulnerable.
-- **Long-Lived Tokens:** Extended expiration times increase the window of opportunity for attackers.
-- **Revocation Limitations:** Revoking a single token is often complex, requiring complex blacklisting mechanisms.
+2. Add a reference to the **AddSecureJwt()** Method in **RamsonDevelopers.SecureJwt** project or the installed NuGet package in your target project's **program.cs**.
 
-## **Rotating JWTs: A Dynamic Solution**
+```csharp
 
-Rotating JWTs involves generating new secret keys periodically, reducing the impact of a compromised key. Our approach takes this a step further:
+builder.Services.AddSecureJwt(options =>
+{
+    options.Config = new RotatingJwtOptions
+   {
+      TokenLifeTime = TimeSpan.FromMinutes(20),
+      RefreshTokenLifeTime = TimeSpan.FromMinutes(40),
+      AesKeySize = 256,
+      Audience = "https://localhost:7054/",
+      Issuer = "https://localhost:7054/",
+   };
 
-1. **User-Specific Key Generation:** Upon user authentication, a unique, randomly generated secret key is associated with that specific user in a secure storage (e.g., a database or a key management system). This key is never stored in application code or configuration files.
-2. **JWT Signing:** When a JWT is issued, it's signed using the user's unique secret key.
-3. **Expiration-Triggered Rotation:** When a JWT expires for a particular user, the system automatically generates a new unique secret key for a specific user. The old key is then deleted or marked as invalid. Any new JWT issued to that user will use the new Key.
-4. **Token Validation:** When a JWT is presented for validation, the system retrieves the user's associated key from secure storage. The key is used to verify the token's signature. If the key does not exist or the signature does not validate, the token will be considered invalid.
+   // Create a random AES
+    using var aes = Aes.Create();
+    aes.KeySize = 256;
+    aes.GenerateKey();
 
-## **Benefits of This Approach:**
+    // Or can use any custom AES key can be from key vault
+    options.Config.SecretKey = Convert.ToBase64String(aes.Key);
+    options.Config.AesKeySize = aes.KeySize;
+    return options;
+});
+```
 
-- **Enhanced Security:** Each user has a unique, short-lived key, limiting the impact of a compromise.
-- **Reduced Attack Surface:** Keys are not hard coded, minimizing the risk of exposure.
-- **Automated Key Management:** Rotation is automated, simplifying security maintenance.
-- **Improved Revocation:** Expired tokens are automatically invalidated with the key rotation.
-- **Compliance:** This methodology aids in compliance with security best practices and regulations that require strong key management.
+---
 
-## **Implementation Considerations:**
+_NOTE: you dont need to have the following lines in the program.cs file:_
 
-- **Secure Key Storage:** Use a robust key management system or database with encryption at rest and in transit.
-- **Performance:** Optimize key retrieval and generation to minimize latency.
-- **Scalability:** Design the system to handle a large number of users and requests.
-- **Error Handling:** Implement robust error handling for key retrieval and validation failures.
-- **Auditing:** Log key generation and rotation events for auditing purposes.
+```csharp
+     builder.Services.AddAuthentication(authentication =>
+        {
+            authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            authentication.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(bearer =>{
+            // Code here
+        });
+```
 
-## **Conclusion:**
+---
 
-Rotating JWTs with dynamically generated, user-specific keys offers a significant security improvement over traditional static JWTs. By automating key rotation and eliminating hardcoded secrets, we can build more secure and resilient applications. This approach reduces the attack surface, simplifies key management, and enhances overall security posture.
+## Usage
 
-Implementing this strategy requires careful planning and consideration of performance and scalability. However, the benefits in terms of enhanced security and reduced risk make it a worthwhile investment for any organization that relies on JWTs for authentication and authorization.
+To create tokens using **RamsonDevelopers.SecureJwt**, follow these steps:
+
+```csharp
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SecureJwt;
+using Serilog;
+
+namespace Tests_Api.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class WeatherForecastController(JwtTokenService jwtTokenService) : ControllerBase
+    {
+        [HttpGet]
+        public string Get()
+        {
+            var tokenResponse = jwtTokenService.GenerateJwtToken("1");
+            Log.Information("Token generated for user {Token}", tokenResponse.Token);
+            Log.Information("Key Pub generated for user {PublicKey}", tokenResponse.PublicKey);
+            return tokenResponse.Token;
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Post()
+        {
+            return Ok();
+        }
+    }
+}
+
+```
+
+---
+
+## Credits
+
+**RamsonDevelopers.SecureJwt** was developed by [Ayush Aher](https://ayush.ramson-developers.com) and is maintained by **Ramson Developers**. We would like to acknowledge the contributions of the open-source community and express our gratitude to all the contributors who helped make this project possible.
+
+---
+
+## Feedback
+
+If you have any feedback, please reach out to us at [ayushaher118@gmail.com](mailto:ayushaher118@gmail.com)
+or [Raise a Issue](https://github.com/Hyperspan/RotatingJwt/issues) in [Github Repository](https://github.com/Hyperspan/RotatingJwt)
