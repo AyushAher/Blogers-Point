@@ -1,3 +1,8 @@
+---
+layout: default
+title: Secure JWT
+---
+
 # **Secure JWT**
 
 In today's API-driven world, JSON Web Tokens (JWTs) have become a cornerstone for authentication and authorization. However, their static nature can pose security risks, particularly if a token is compromised. Traditional JWTs, with a fixed secret key, remain valid until their expiration, leaving a window of vulnerability.

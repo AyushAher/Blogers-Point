@@ -1,3 +1,6 @@
 title: Ayush Aher's Technical Documentations
 description: Technical Documentations by Ayush Aher
-theme: jekyll-theme-midnight
+remote_theme: jekyll-theme-midnight
+show_excerpts: true
+plugins:
+  - jekyll-remote-theme # Ensure this is included
