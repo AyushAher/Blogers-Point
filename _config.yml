@@ -1,6 +1,6 @@
 title: Ayush Aher's Blogs
 description: Technical Blogs by Ayush Aher
-theme: midnight
+theme: Midnight
 show_excerpts: true
 plugins:
   - jekyll-feed
