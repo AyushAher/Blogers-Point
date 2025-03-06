@@ -5,6 +5,8 @@ title: Home
 
 ## **Welcome to my personal tech blog! This repository serves as a collection of my notes, learnings, and explorations in the world of technology.**
 
+---
+
 ## About
 
 Here, I'll be documenting my journey through various technical topics, including:
@@ -44,7 +46,7 @@ While this is primarily a personal repository, I welcome feedback and suggestion
 
 ## License
 
-This repository is licensed under the [MIT License](LICENSE) (or your preferred license).
+This repository is licensed under the [MIT License](LICENSE)
 
 ---
 
